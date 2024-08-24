@@ -1,15 +1,38 @@
+using GestaoColaboradoresBackend.Data;
+using GestaoColaboradoresBackend.Services;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Configurar a conexão com o banco de dados SQL Server
+builder.Services.AddDbContext<CollaboratorManagementContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Configurar a política de CORS para permitir qualquer origem (Apenas para desenvolvimento)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+});
+
+builder.Services.AddScoped<ICollaboratorService, CollaboratorService>();
+// Adicionar serviços ao contêiner
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+// Configurar Swagger para documentação da API
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Usar a política de CORS
+app.UseCors("AllowAllOrigins");
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
