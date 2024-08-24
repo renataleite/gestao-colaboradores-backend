@@ -10,5 +10,6 @@ namespace GestaoColaboradoresBackend.Services
         Task<Collaborator> AddCollaboratorAsync(CreateCollaboratorDto collaboratorDto);
         Task<bool> UpdateCollaboratorAsync(int id, UpdateCollaboratorDto collaboratorDto);
         Task<bool> CollaboratorExistsAsync(int id);
+        Task<bool> DeleteCollaboratorAsync(int id);
     }
 }

@@ -65,5 +65,19 @@ namespace GestaoColaboradoresBackend.Controllers
             return NoContent();
         }
 
+        // DELETE: api/Collaborators/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCollaborator(int id)
+        {
+            var result = await _collaboratorService.DeleteCollaboratorAsync(id);
+
+            if (!result)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+
     }
 }

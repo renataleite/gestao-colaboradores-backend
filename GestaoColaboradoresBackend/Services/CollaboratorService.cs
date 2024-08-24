@@ -71,6 +71,20 @@ namespace GestaoColaboradoresBackend.Services
             }
         }
 
+        public async Task<bool> DeleteCollaboratorAsync(int id)
+        {
+            var collaborator = await _context.Collaborators.FindAsync(id);
+            if (collaborator == null)
+            {
+                return false;
+            }
+
+            _context.Collaborators.Remove(collaborator);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
         public async Task<bool> CollaboratorExistsAsync(int id)
         {
             return await _context.Collaborators.AnyAsync(e => e.Id == id);
