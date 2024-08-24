@@ -1,5 +1,4 @@
-﻿using GestaoColaboradoresBackend.Models.GestaoColaboradores.Models;
-using GestaoColaboradoresBackend.Models;
+﻿using GestaoColaboradoresBackend.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GestaoColaboradoresBackend.Data

@@ -4,6 +4,7 @@ using GestaoColaboradoresBackend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestaoColaboradoresBackend.Migrations
 {
     [DbContext(typeof(CollaboratorManagementContext))]
-    partial class CollaboratorManagementContextModelSnapshot : ModelSnapshot
+    [Migration("20240824181322_AddAttendance")]
+    partial class AddAttendance
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,30 +24,6 @@ namespace GestaoColaboradoresBackend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("GestaoColaboradoresBackend.Models.Attendance", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CheckInTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CheckOutTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CollaboratorId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CollaboratorId");
-
-                    b.ToTable("Attendances");
-                });
 
             modelBuilder.Entity("GestaoColaboradoresBackend.Models.Collaborator", b =>
                 {
@@ -56,18 +35,15 @@ namespace GestaoColaboradoresBackend.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Position")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RegistrationNumber")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Salary")
                         .HasColumnType("decimal(18,2)");
@@ -77,7 +53,31 @@ namespace GestaoColaboradoresBackend.Migrations
                     b.ToTable("Collaborators");
                 });
 
-            modelBuilder.Entity("GestaoColaboradoresBackend.Models.Attendance", b =>
+            modelBuilder.Entity("GestaoColaboradoresBackend.Models.GestaoColaboradores.Models.Attendance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CollaboratorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EntryTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExitTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CollaboratorId");
+
+                    b.ToTable("Attendances");
+                });
+
+            modelBuilder.Entity("GestaoColaboradoresBackend.Models.GestaoColaboradores.Models.Attendance", b =>
                 {
                     b.HasOne("GestaoColaboradoresBackend.Models.Collaborator", "Collaborator")
                         .WithMany("Attendances")

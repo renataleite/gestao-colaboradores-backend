@@ -1,18 +1,28 @@
-﻿using GestaoColaboradoresBackend.Models.GestaoColaboradores.Models;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace GestaoColaboradoresBackend.Models
 {
     public class Collaborator
     {
         public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string RegistrationNumber { get; set; } = string.Empty;
-        public string Position { get; set; } = string.Empty;
 
-        [Column(TypeName = "decimal(18,2)")]
+        [Required]
+        [MaxLength(100)]
+        public string Name { get; set; }
+
+        [Required]
+        [MaxLength(20)]
+        public string RegistrationNumber { get; set; }
+
+        [Required]
+        [MaxLength(50)]
+        public string Position { get; set; }
+
+        [Range(0, double.MaxValue)]
         public decimal Salary { get; set; }
 
+        [JsonIgnore]
         public ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();
     }
 }

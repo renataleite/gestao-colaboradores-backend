@@ -21,6 +21,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddScoped<ICollaboratorService, CollaboratorService>();
+builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 // Adicionar serviços ao contêiner
 builder.Services.AddControllers();
 
