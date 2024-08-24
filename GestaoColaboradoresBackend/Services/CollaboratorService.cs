@@ -39,5 +39,41 @@ namespace GestaoColaboradoresBackend.Services
 
             return collaborator;
         }
+
+        public async Task<bool> UpdateCollaboratorAsync(int id, UpdateCollaboratorDto collaboratorDto)
+        {
+            var collaborator = await _context.Collaborators.FindAsync(id);
+            if (collaborator == null)
+                return false;
+
+            collaborator.Name = collaboratorDto.Name;
+            collaborator.RegistrationNumber = collaboratorDto.RegistrationNumber;
+            collaborator.Position = collaboratorDto.Position;
+            collaborator.Salary = collaboratorDto.Salary;
+
+            _context.Entry(collaborator).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await CollaboratorExistsAsync(id))
+                {
+                    return false;
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        public async Task<bool> CollaboratorExistsAsync(int id)
+        {
+            return await _context.Collaborators.AnyAsync(e => e.Id == id);
+        }
     }
 }

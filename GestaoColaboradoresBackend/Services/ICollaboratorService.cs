@@ -8,5 +8,7 @@ namespace GestaoColaboradoresBackend.Services
         Task<IEnumerable<Collaborator>> GetCollaboratorsAsync();
         Task<Collaborator> GetCollaboratorByIdAsync(int id);
         Task<Collaborator> AddCollaboratorAsync(CreateCollaboratorDto collaboratorDto);
+        Task<bool> UpdateCollaboratorAsync(int id, UpdateCollaboratorDto collaboratorDto);
+        Task<bool> CollaboratorExistsAsync(int id);
     }
 }

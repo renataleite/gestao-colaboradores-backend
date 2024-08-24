@@ -45,5 +45,25 @@ namespace GestaoColaboradoresBackend.Controllers
 
             return CreatedAtAction(nameof(GetCollaborator), new { id = collaborator.Id }, collaborator);
         }
+
+        // PUT: api/Collaborators/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutCollaborator(int id, UpdateCollaboratorDto collaboratorDto)
+        {
+            if (!await _collaboratorService.CollaboratorExistsAsync(id))
+            {
+                return NotFound();
+            }
+
+            var result = await _collaboratorService.UpdateCollaboratorAsync(id, collaboratorDto);
+
+            if (!result)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+
     }
 }
