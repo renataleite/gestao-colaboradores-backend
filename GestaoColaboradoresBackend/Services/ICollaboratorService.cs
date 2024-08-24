@@ -11,5 +11,6 @@ namespace GestaoColaboradoresBackend.Services
         Task<bool> UpdateCollaboratorAsync(int id, UpdateCollaboratorDto collaboratorDto);
         Task<bool> CollaboratorExistsAsync(int id);
         Task<bool> DeleteCollaboratorAsync(int id);
+        Task<IEnumerable<CollaboratorReportDto>> GetReportAsync(int month, int year);
     }
 }

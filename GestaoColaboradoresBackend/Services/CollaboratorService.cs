@@ -89,5 +89,33 @@ namespace GestaoColaboradoresBackend.Services
         {
             return await _context.Collaborators.AnyAsync(e => e.Id == id);
         }
+
+        public async Task<IEnumerable<CollaboratorReportDto>> GetReportAsync(int month, int year)
+        {
+            var report = await _context.Collaborators
+                .Include(c => c.Attendances)
+                .Where(c => c.Attendances.Any(a => a.CheckInTime.Month == month && a.CheckInTime.Year == year))
+                .ToListAsync();
+
+            var reportDto = report.Select(c => new CollaboratorReportDto
+            {
+                CollaboratorId = c.Id,
+                Name = c.Name,
+                RegistrationNumber = c.RegistrationNumber,
+                Position = c.Position,
+                Salary = c.Salary,
+                Attendances = c.Attendances
+                    .Where(a => a.CheckInTime.Month == month && a.CheckInTime.Year == year)
+                    .Select(a => new AttendanceDto
+                    {
+                        CheckInTime = a.CheckInTime,
+                        CheckOutTime = a.CheckOutTime
+                    }).ToList()
+            }).ToList();
+
+            return reportDto;
+        }
+
+
     }
 }

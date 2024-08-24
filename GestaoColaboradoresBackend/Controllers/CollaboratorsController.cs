@@ -79,5 +79,18 @@ namespace GestaoColaboradoresBackend.Controllers
             return NoContent();
         }
 
+        [HttpGet("report")]
+        public async Task<ActionResult<IEnumerable<CollaboratorReportDto>>> GetReport(int month, int year)
+        {
+            var report = await _collaboratorService.GetReportAsync(month, year);
+
+            if (!report.Any())
+            {
+                return NotFound("Nenhum registro encontrado para o mês e ano fornecidos.");
+            }
+
+            return Ok(report);
+        }
+
     }
 }
