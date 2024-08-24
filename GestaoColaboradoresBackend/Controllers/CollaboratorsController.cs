@@ -16,6 +16,13 @@ namespace GestaoColaboradoresBackend.Controllers
             _collaboratorService = collaboratorService;
         }
 
+        // GET: api/Collaborators
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Collaborator>>> GetCollaborators()
+        {
+            return Ok(await _collaboratorService.GetCollaboratorsAsync());
+        }
+
         // GET: api/Collaborators/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Collaborator>> GetCollaborator(int id)

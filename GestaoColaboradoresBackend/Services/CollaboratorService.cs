@@ -14,6 +14,11 @@ namespace GestaoColaboradoresBackend.Services
             _context = context;
         }
 
+        public async Task<IEnumerable<Collaborator>> GetCollaboratorsAsync()
+        {
+            return await _context.Collaborators.Include(c => c.Attendances).ToListAsync();
+        }
+
         public async Task<Collaborator> GetCollaboratorByIdAsync(int id)
         {
             return await _context.Collaborators.Include(c => c.Attendances).FirstOrDefaultAsync(c => c.Id == id);
