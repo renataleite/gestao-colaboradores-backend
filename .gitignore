@@ -1,0 +1,58 @@
+# Visual Studio
+.vscode/
+.vs/
+*.csproj.user
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# ASP.NET Core
+bin/
+obj/
+logs/
+logs/*
+appsettings.Development.json
+
+# DotNet Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+
+# Resharper
+_ReSharper*/
+*.[rR]e[Ss]harper
+
+# Rider
+.idea/
+*.sln.iml
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Azure Pipelines
+.terraform/
+terraform.tfstate
+*.tfreport
+.terraform.lock.hcl
+
+# Backup files
+*_backup_*/
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# TFS
+$tf/
