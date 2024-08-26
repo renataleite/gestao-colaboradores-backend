@@ -3,7 +3,7 @@
     public class CreateAttendanceDto
     {
         public int CollaboratorId { get; set; }
-        public DateTime CheckInTime { get; set; }
-        public DateTime CheckOutTime { get; set; }
+        public string CheckInTime { get; set; }
+        public string CheckOutTime { get; set; }
     }
 }
