@@ -1,12 +1,36 @@
 using GestaoColaboradoresBackend.Data;
 using GestaoColaboradoresBackend.Services;
 using Microsoft.EntityFrameworkCore;
+using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configurar a conexão com o banco de dados SQL Server
-builder.Services.AddDbContext<CollaboratorManagementContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Carregar variáveis de ambiente do arquivo .env
+Env.Load();
+
+// Recuperar variáveis de ambiente
+string? dbServer = Environment.GetEnvironmentVariable("DB_SERVER");
+string? dbDatabase = Environment.GetEnvironmentVariable("DB_DATABASE");
+string? dbUser = Environment.GetEnvironmentVariable("DB_USER");
+string? dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
+
+// Verifique se todas as variáveis de ambiente necessárias estão presentes
+if (!string.IsNullOrEmpty(dbServer) && !string.IsNullOrEmpty(dbDatabase) &&
+    !string.IsNullOrEmpty(dbUser) && !string.IsNullOrEmpty(dbPassword))
+{
+    // Construir a string de conexão usando variáveis de ambiente
+    string connectionString = $"Server={dbServer};Database={dbDatabase};User Id={dbUser};Password={dbPassword};MultipleActiveResultSets=true;Encrypt=True;TrustServerCertificate=true";
+
+    // Configurar o DbContext usando a string de conexão construída
+    builder.Services.AddDbContext<CollaboratorManagementContext>(options =>
+        options.UseSqlServer(connectionString));
+}
+else
+{
+    // Usar a string de conexão do appsettings.json
+    builder.Services.AddDbContext<CollaboratorManagementContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+}
 
 // Configurar a política de CORS para permitir qualquer origem (Apenas para desenvolvimento)
 builder.Services.AddCors(options =>
@@ -20,8 +44,10 @@ builder.Services.AddCors(options =>
         });
 });
 
+// Registrar serviços no contêiner de dependência
 builder.Services.AddScoped<ICollaboratorService, CollaboratorService>();
 builder.Services.AddScoped<IAttendanceService, AttendanceService>();
+
 // Adicionar serviços ao contêiner
 builder.Services.AddControllers();
 
@@ -34,11 +60,8 @@ var app = builder.Build();
 // Usar a política de CORS
 app.UseCors("AllowAllOrigins");
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 

@@ -12,7 +12,6 @@ bin/
 obj/
 logs/
 logs/*
-appsettings.Development.json
 
 # DotNet Core
 project.lock.json
@@ -55,3 +54,6 @@ Desktop.ini
 
 # TFS
 $tf/
+
+#Variáveis de ambiente
+.env
