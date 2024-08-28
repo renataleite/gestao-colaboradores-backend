@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestaoColaboradoresBackend.Migrations
 {
     [DbContext(typeof(CollaboratorManagementContext))]
-    [Migration("20240824200213_UpdateCollaboratorTable")]
-    partial class UpdateCollaboratorTable
+    [Migration("20240828014324_create-database")]
+    partial class createdatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

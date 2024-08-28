@@ -43,7 +43,7 @@ namespace GestaoColaboradoresBackend.Migrations
 
                     b.HasIndex("CollaboratorId");
 
-                    b.ToTable("Attendances");
+                    b.ToTable("Attendances", (string)null);
                 });
 
             modelBuilder.Entity("GestaoColaboradoresBackend.Models.Collaborator", b =>
@@ -74,7 +74,7 @@ namespace GestaoColaboradoresBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Collaborators");
+                    b.ToTable("Collaborators", (string)null);
                 });
 
             modelBuilder.Entity("GestaoColaboradoresBackend.Models.Attendance", b =>
