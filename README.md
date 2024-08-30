@@ -78,7 +78,7 @@ O projeto segue uma **Arquitetura de Camadas** (Layered Architecture), que é um
 ### Clonar o Repositório:
 
 ```bash
-git clone https://github.com/seuusuario/GestaoColaboradoresBackend.git
+git clone https://github.com/renataleite/gestao-colaboradores-backend.git
 cd gestao-colaboradores-backend/GestaoColaboradoresBackend
 ```
 
