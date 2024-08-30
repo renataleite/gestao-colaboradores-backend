@@ -19,67 +19,102 @@ namespace GestaoColaboradoresBackend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Attendance>>> GetAttendances()
         {
-            var attendances = await _attendanceService.GetAllAttendancesAsync();
-            return Ok(attendances);
+            try
+            {
+                var attendances = await _attendanceService.GetAllAttendancesAsync();
+                return Ok(attendances);
+            }
+            catch (Exception ex)
+            {
+                // Log de erro (pode ser feito usando uma ferramenta de logging)
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Attendance>> GetAttendance(int id)
         {
-            var attendance = await _attendanceService.GetAttendanceByIdAsync(id);
-            if (attendance == null)
+            try
             {
-                return NotFound();
-            }
+                var attendance = await _attendanceService.GetAttendanceByIdAsync(id);
+                if (attendance == null)
+                {
+                    return NotFound($"Attendance with ID {id} not found.");
+                }
 
-            return Ok(attendance);
+                return Ok(attendance);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPost]
         public async Task<ActionResult<Attendance>> CreateAttendance(CreateAttendanceDto attendanceDto)
         {
-            var attendance = await _attendanceService.CreateAttendanceAsync(attendanceDto);
-            return CreatedAtAction(nameof(GetAttendance), new { id = attendance.Id }, attendance);
+            try
+            {
+                var attendance = await _attendanceService.CreateAttendanceAsync(attendanceDto);
+                return CreatedAtAction(nameof(GetAttendance), new { id = attendance.Id }, attendance);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpGet("filter")]
         public async Task<ActionResult<IEnumerable<Attendance>>> GetAttendancesByMonth(int year, int month)
         {
-            var attendances = await _attendanceService.GetAttendancesByMonthAsync(year, month);
-
-            if (attendances == null || !attendances.Any())
+            try
             {
-                return NotFound("No attendances found for the specified month and year.");
-            }
+                var attendances = await _attendanceService.GetAttendancesByMonthAsync(year, month);
 
-            return Ok(attendances);
+                if (attendances == null || !attendances.Any())
+                {
+                    return NotFound($"No attendances found for {month}/{year}.");
+                }
+
+                return Ok(attendances);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpGet("export")]
         public async Task<IActionResult> ExportAttendancesToExcel(int? year, int? month)
         {
-            byte[] excelData;
-
-            if (year.HasValue && month.HasValue)
+            try
             {
-                excelData = await _attendanceService.GenerateExcelReportAsync(year.Value, month.Value);
+                byte[] excelData;
+
+                if (year.HasValue && month.HasValue)
+                {
+                    excelData = await _attendanceService.GenerateExcelReportAsync(year.Value, month.Value);
+                }
+                else
+                {
+                    excelData = await _attendanceService.GenerateExcelReportAsync();
+                }
+
+                if (excelData == null || excelData.Length == 0)
+                {
+                    return NotFound("No attendances found.");
+                }
+
+                string excelName = year.HasValue && month.HasValue
+                    ? $"AttendanceReport-{year}-{month}.xlsx"
+                    : "AttendanceReport-All.xlsx";
+
+                return File(excelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
             }
-            else
+            catch (Exception ex)
             {
-                excelData = await _attendanceService.GenerateExcelReportAsync();
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-
-            if (excelData == null || excelData.Length == 0)
-            {
-                return NotFound("No attendances found.");
-            }
-
-            string excelName = year.HasValue && month.HasValue
-                ? $"AttendanceReport-{year}-{month}.xlsx"
-                : "AttendanceReport-All.xlsx";
-
-            return File(excelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
         }
-
     }
 }

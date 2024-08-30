@@ -20,77 +20,118 @@ namespace GestaoColaboradoresBackend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Collaborator>>> GetCollaborators()
         {
-            return Ok(await _collaboratorService.GetCollaboratorsAsync());
+            try
+            {
+                var collaborators = await _collaboratorService.GetCollaboratorsAsync();
+                return Ok(collaborators);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         // GET: api/Collaborators/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Collaborator>> GetCollaborator(int id)
         {
-            var collaborator = await _collaboratorService.GetCollaboratorByIdAsync(id);
-
-            if (collaborator == null)
+            try
             {
-                return NotFound();
-            }
+                var collaborator = await _collaboratorService.GetCollaboratorByIdAsync(id);
 
-            return Ok(collaborator);
+                if (collaborator == null)
+                {
+                    return NotFound($"Collaborator with ID {id} not found.");
+                }
+
+                return Ok(collaborator);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         // POST: api/Collaborators
         [HttpPost]
         public async Task<ActionResult<Collaborator>> PostCollaborator(CreateCollaboratorDto collaboratorDto)
         {
-            var collaborator = await _collaboratorService.AddCollaboratorAsync(collaboratorDto);
-
-            return CreatedAtAction(nameof(GetCollaborator), new { id = collaborator.Id }, collaborator);
+            try
+            {
+                var collaborator = await _collaboratorService.AddCollaboratorAsync(collaboratorDto);
+                return CreatedAtAction(nameof(GetCollaborator), new { id = collaborator.Id }, collaborator);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         // PUT: api/Collaborators/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCollaborator(int id, UpdateCollaboratorDto collaboratorDto)
         {
-            if (!await _collaboratorService.CollaboratorExistsAsync(id))
+            try
             {
-                return NotFound();
+                if (!await _collaboratorService.CollaboratorExistsAsync(id))
+                {
+                    return NotFound($"Collaborator with ID {id} not found.");
+                }
+
+                var result = await _collaboratorService.UpdateCollaboratorAsync(id, collaboratorDto);
+
+                if (!result)
+                {
+                    return NotFound($"Collaborator with ID {id} could not be updated.");
+                }
+
+                return NoContent();
             }
-
-            var result = await _collaboratorService.UpdateCollaboratorAsync(id, collaboratorDto);
-
-            if (!result)
+            catch (Exception ex)
             {
-                return NotFound();
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-
-            return NoContent();
         }
 
         // DELETE: api/Collaborators/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCollaborator(int id)
         {
-            var result = await _collaboratorService.DeleteCollaboratorAsync(id);
-
-            if (!result)
+            try
             {
-                return NotFound();
-            }
+                var result = await _collaboratorService.DeleteCollaboratorAsync(id);
 
-            return NoContent();
+                if (!result)
+                {
+                    return NotFound($"Collaborator with ID {id} not found.");
+                }
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpGet("report")]
         public async Task<ActionResult<IEnumerable<CollaboratorReportDto>>> GetReport(int month, int year)
         {
-            var report = await _collaboratorService.GetReportAsync(month, year);
-
-            if (!report.Any())
+            try
             {
-                return NotFound("Nenhum registro encontrado para o mês e ano fornecidos.");
+                var report = await _collaboratorService.GetReportAsync(month, year);
+
+                if (!report.Any())
+                {
+                    return NotFound("Nenhum registro encontrado para o mês e ano fornecidos.");
+                }
+
+                return Ok(report);
             }
-
-            return Ok(report);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
-
     }
 }
