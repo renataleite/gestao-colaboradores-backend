@@ -2,6 +2,43 @@
 
 Este é um projeto backend desenvolvido em ASP.NET Core para gerenciar colaboradores e seus registros de frequência. O sistema permite adicionar, modificar, listar e remover colaboradores, bem como gerar relatórios de frequência mensal. O backend foi projetado para funcionar com uma API RESTful e pode ser integrado com um frontend desenvolvido em Angular.
 
+## Arquitetura Utilizada
+
+O projeto segue uma **Arquitetura de Camadas** (Layered Architecture), que é uma das abordagens mais comuns para estruturar aplicações. Esta arquitetura facilita a separação de responsabilidades, manutenção e escalabilidade do sistema.
+
+### Componentes Principais da Arquitetura:
+
+1. **Camada de Apresentação (Presentation Layer):**
+   - Contém os controladores (Controllers) que expõem os endpoints da API.
+   - Recebe as solicitações HTTP e as encaminha para a camada de aplicação.
+   - Utiliza o ASP.NET Core para definir os controladores e os endpoints RESTful.
+
+2. **Camada de Aplicação (Application Layer):**
+   - Contém a lógica de aplicação e coordena o fluxo entre as camadas de apresentação e de dados.
+   - Inclui os serviços que lidam com operações de negócios específicas, como adicionar, atualizar ou remover colaboradores e registros de frequência.
+   - Implementa a lógica de negócios necessária antes de interagir com a camada de dados.
+
+3. **Camada de Dados (Data Layer):**
+   - Responsável pelo acesso aos dados e pela comunicação com o banco de dados.
+   - Utiliza o Entity Framework Core como ORM (Object-Relational Mapping) para realizar operações de banco de dados.
+   - Inclui o contexto do banco de dados e as entidades (models) que representam as tabelas do banco de dados.
+
+4. **Camada de Infraestrutura (Infrastructure Layer):**
+   - Contém a configuração do ambiente, bibliotecas de terceiros e outras dependências.
+   - Lida com aspectos de infraestrutura, como configurações de banco de dados e logging.
+   - Inclui a configuração do Docker e outros scripts de deployment.
+
+5. **Camada de Testes (Test Layer):**
+   - Contém testes automatizados para garantir a qualidade e a funcionalidade do código.
+   - Inclui testes de unidade para os serviços e controladores, utilizando frameworks de teste como xUnit.
+
+### Vantagens da Arquitetura Utilizada:
+
+- **Manutenção e Extensibilidade:** A separação de responsabilidades facilita a manutenção e a adição de novas funcionalidades ao sistema.
+- **Testabilidade:** As camadas de aplicação e dados são bem definidas, o que facilita a criação de testes unitários.
+- **Reutilização de Código:** As funcionalidades podem ser reutilizadas em diferentes partes da aplicação ou em outros projetos.
+- **Isolamento de Camadas:** Mudanças em uma camada não afetam as outras camadas, desde que a interface da camada seja mantida.
+
 ## Funcionalidades
 
 ### Colaboradores:
